@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+	var map;
+	
+//Déclaration des points, du zoom et du type de carte
+function initialize() {
+  var Paris = new google.maps.LatLng(48.853,2.35);
+  var Rome = new google.maps.LatLng(41.89,12.35);
+  var Pologne = new google.maps.LatLng(52,20);
+  var mapOptions = {
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  }
+  
+  //Création de la carte
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'Location found using HTML5.'
+      });
+console.log(pos);
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+  
+  //Déclaration du marqueur 1
+  var marker = new google.maps.Marker({
+      position: Paris,
+      map: map,
+      title: 'Je suis allé là!'
+  });
+  // Options de la fenêtre
+	var myWindowOptions = {
+	content:
+	'<h2>Paris</h2>'+
+	'<p>J\'ai visité la Bastille et c\'était cool !</p>'+
+	'<p><a href="">Images</a></p>'+
+	'<p><a href="">Vidéo</a></p>'
+	};
+	// Création de la fenêtre
+	var myInfoWindow = new google.maps.InfoWindow(myWindowOptions);
+	// Affichage de la fenêtre au click sur le marker
+	google.maps.event.addListener(marker, 'click', function() {
+	myInfoWindow.open(map,marker);
+	});
+  
+  //Déclaration du marqueur 2
+  var marker2 = new google.maps.Marker({
+      position: Rome,
+      map: map,
+      title: 'Ici aussi !'
+  });
+  //Déclaration du marqueur 3
+  var marker3 = new google.maps.Marker({
+      position: Pologne,
+      map: map,
+      title: 'Et là bas aussi !'
+  });
+  // Affichage de la fenêtre au click sur le marker
+	google.maps.event.addListener(marker, 'click', function() {
+	myInfoWindow.open(map,marker);
+	});
+  
+}
+
+//Géolocalisation fail
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Erreur: Le service de géolocalisation a échoué.';
+  } else {
+    var content = 'Erreur: Votre navigateur web ne supporte pas le service de géolocalisation.';
+  }
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(48.853,2.35),
+    content: content
+  };
+
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+}
+
+//Affichage sur mobile
+function detectBrowser() {
+  var useragent = navigator.userAgent;
+  var mapdiv = document.getElementById("map-canvas");
+
+  if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+    mapdiv.style.width = '100%';
+    mapdiv.style.height = '100%';
+  } else {
+    mapdiv.style.width = '600px';
+    mapdiv.style.height = '800px';
+  }
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
