@@ -1,0 +1,22 @@
+git add [fichier] -> suivre et indexer des nouveaux fichiers
+git add -A -> ajout de toutes les modifs
+git commit -> valider les modifications
+git commit -m 'message' -> permet de mettre le message directement
+git commit -a -m 'message' ->
+git pull -> màj du dépôt local
+git log -> historique
+git config remote.origin.url -> afficher repo actuel
+git remote -> afficher les serveurs distants enregistrés
+git remote -v -> affiche l'url
+git remote add [nomdépôt] [url] -> ajouter nouveau dépôt
+git remote set-url origin https://github.com/blabla.git -> changer de repo
+git status -> afficher état des fichiers
+git push -> pousser son travail sur un dépôt distant
+git push origin master -> pousser dans origin master
+git rm -> supprimer fichier
+
+étapes à suivre :
+git status -> afficher état des fichiers
+git add [fichier] -> suivre et indexer des nouveaux fichiers
+git commit -m 'message' -> permet de mettre le message directement
+git push origin master -> push dans la branche "master"
