@@ -1,0 +1,106 @@
+<html>
+<body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+	// on initialise le FB JS SDK / init the FB JS SDK
+    FB.init({
+      appId      : '255821301231746', // ID de l'application / Application's ID
+      channelUrl : '', // URL du fichier / Channel File
+      status     : true, // vérifie si connecté / check login status
+      cookie     : true, // autorisation de l'utilisation des cookie / enable cookies to allow the server to access the session
+      xfbml      : true  //  utilisé pour intégrer des modules sociaux / look for social plugins on the page
+    });
+    
+    
+	FB.Event.subscribe('auth.authResponseChange', function(response) 
+	{
+ 	 if (response.status === 'connected') 
+  	{
+  		document.getElementById("message").innerHTML +=  "<br>Connected to Facebook";
+  		// SUCCES / SUCCESS
+  		
+  	}	 
+	else if (response.status === 'not_authorized') 
+    {
+    	document.getElementById("message").innerHTML +=  "<br>Failed to Connect";
+
+		// ECHEC / FAILED
+    } else 
+    {
+    	document.getElementById("message").innerHTML +=  "<br>Logged Out";
+
+    	// ERREUR INCONNUE / UNKNOWN ERROR
+    }
+	});	
+	
+    };
+    // fonction qui permet de récupérer les données utilisateurs si autorisé
+   	function Login()
+	{
+	
+		FB.login(function(response) {
+		   if (response.authResponse) 
+		   {
+		    	getUserInfo();
+  			} else 
+  			{
+  	    	 console.log('User cancelled login or did not fully authorize.');
+   			}
+		 },{scope: 'email,user_photos,user_videos'});
+	
+	
+	}
+  // fonction appelée si on peut récupérer les données
+  function getUserInfo() {
+	    FB.api('/me', function(response) {
+
+	  var str="<b>Name</b> : "+response.name+"<br>";
+	  	  str +="<b>Link: </b>"+response.link+"<br>";
+	  	  str +="<b>Username:</b> "+response.username+"<br>";
+	  	  str +="<b>id: </b>"+response.id+"<br>";
+	  	  str +="<b>Email:</b> "+response.email+"<br>";
+	  	  str +="<input type='button' value='Get Photo' onclick='getPhoto();'/>";
+	  	  str +="<input type='button' value='Logout' onclick='Logout();'/>";
+	  	  document.getElementById("status").innerHTML=str;
+	  	  	    
+    });
+    }
+	function getPhoto()
+	{
+	  FB.api('/me/picture?type=normal', function(response) {
+
+		  var str="<br/><b>Pic</b> : <img src='"+response.data.url+"'/>";
+	  	  document.getElementById("status").innerHTML+=str;
+	  	  	    
+    });
+	
+	}
+	function Logout()
+	{
+		FB.logout(function(){document.location.reload();});
+	}
+
+  // Load the SDK asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+
+</script>
+<div align="center">
+<div id="status">
+Se connecter avec Facebook :<br/>
+<img src="img/LoginWithFacebook.png" style="cursor:pointer;" onclick="Login()"/>
+</div>
+<br/><br/><br/><br/><br/>
+<div id="message">
+Logs:<br/>
+</div>
+
+</div>
+</body>
+</html>
